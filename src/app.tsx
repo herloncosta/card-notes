@@ -1,30 +1,43 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { NewNoteCard } from './components/new-note-card'
 import { NoteCard } from './components/note-card'
 
+interface Note {
+    id: string
+    date: Date
+    content: string
+}
+
 export function App() {
-    const [notes, setNotes] = useState([
-        {
-            id: 1,
-            date: new Date(),
-            content: 'Lorem ipsum dolor sit amet...',
-        },
-        {
-            id: 2,
-            date: new Date(),
-            content: 'Lorem ipsum dolor sit amet...',
-        },
-    ])
+    const [notes, setNotes] = useState<Note[]>(() => {
+        const notesOnStorage = localStorage.getItem('notes')
+        if (notesOnStorage) {
+            return JSON.parse(notesOnStorage)
+        }
+        return []
+    })
+    const [search, setSearch] = useState('')
 
     function onNoteCreated(content: string) {
         const newNote = {
-            id: Math.random(),
+            id: crypto.randomUUID(),
             date: new Date(),
-            content
+            content,
         }
-
-        setNotes([newNote, ...notes])
+        const notesArray = [newNote, ...notes]
+        setNotes(notesArray)
+        localStorage.setItem('notes', JSON.stringify(notesArray))
     }
+
+    function handleSearch(event: ChangeEvent<HTMLInputElement>) {
+        const query = event.target.value.toLocaleLowerCase()
+        setSearch(query)
+    }
+
+    const filteredNotes =
+        search !== ''
+            ? notes.filter(note => note.content.toLocaleLowerCase().includes(search))
+            : notes
 
     return (
         <div className="max-w-6xl mx-auto my-12 space-y-6">
@@ -35,6 +48,7 @@ export function App() {
                     className="w-full bg-transparent text-3xl font-semibold tracking-tight outline-none placeholder:text-slate-500"
                     type="text"
                     placeholder="Busque suas notas..."
+                    onChange={handleSearch}
                 />
             </form>
 
@@ -43,7 +57,7 @@ export function App() {
             <div className="grid grid-cols-3 gap-6 auto-rows-[250px]">
                 <NewNoteCard onNoteCreated={onNoteCreated} />
 
-                {notes.map(note => (
+                {filteredNotes.map(note => (
                     <NoteCard key={note.id} note={note} />
                 ))}
             </div>
