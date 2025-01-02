@@ -11,6 +11,7 @@ Acesse a versão online do **Anotaê**: [anotae.netlify.app](https://anotae.netl
 - **Tailwind CSS**: Framework CSS utilitário para estilização rápida e eficiente.
 - **LocalStorage**: Armazenamento local para salvar as notas, garantindo persistência entre recarregamentos da página.
 - **Sonner**: Biblioteca de notificações para informar o usuário sobre ações (como sucesso ou erro).
+- **Vite**: Ferramenta de build do projeto.
 
 ## 📝 **Funcionalidades**
 
@@ -39,10 +40,15 @@ Acesse a versão online do **Anotaê**: [anotae.netlify.app](https://anotae.netl
 
 4. Inicie o servidor de desenvolvimento:
    ```bash
-   npm start
+   npm run dev
    ```
 
 5. Abra o navegador e acesse [http://localhost:3000](http://localhost:3000).
+
+6. Para realizar uma nova build:
+   ```bash
+   npm run build
+   ```
 
 ## 💻 **Como Usar**
 
