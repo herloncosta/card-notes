@@ -57,7 +57,6 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
             const transcription = Array.from(event.results).reduce((text, result) => {
                 return text.concat(result[0].transcript)
             }, '')
-            console.log(transcription)
             setContent(transcription)
         }
 
