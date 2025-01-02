@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react'
 import { NewNoteCard } from './components/new-note-card'
 import { NoteCard } from './components/note-card'
 
-interface Note {
+export interface Note {
     id: string
     date: Date
     content: string
@@ -27,6 +27,12 @@ export function App() {
         const notesArray = [newNote, ...notes]
         setNotes(notesArray)
         localStorage.setItem('notes', JSON.stringify(notesArray))
+    }
+
+    function onNoteDeleted(id: string) {
+        const notesArray = notes.filter(note => note.id !== id)
+        setNotes(notesArray)
+        localStorage.setItem("notes", JSON.stringify(notesArray))
     }
 
     function handleSearch(event: ChangeEvent<HTMLInputElement>) {
@@ -58,7 +64,7 @@ export function App() {
                 <NewNoteCard onNoteCreated={onNoteCreated} />
 
                 {filteredNotes.map(note => (
-                    <NoteCard key={note.id} note={note} />
+                    <NoteCard key={note.id} note={note} onNoteDeleted={onNoteDeleted} />
                 ))}
             </div>
         </div>
