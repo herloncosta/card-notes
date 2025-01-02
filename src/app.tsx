@@ -32,7 +32,7 @@ export function App() {
     function onNoteDeleted(id: string) {
         const notesArray = notes.filter(note => note.id !== id)
         setNotes(notesArray)
-        localStorage.setItem("notes", JSON.stringify(notesArray))
+        localStorage.setItem('notes', JSON.stringify(notesArray))
     }
 
     function handleSearch(event: ChangeEvent<HTMLInputElement>) {
@@ -47,7 +47,7 @@ export function App() {
 
     return (
         <div className="max-w-6xl mx-auto my-12 space-y-6">
-            <h1 className="text-3xl font-bold select-none">Personal Notes</h1>
+            <h1 className="text-3xl font-bold select-none">Anotaê</h1>
 
             <form className="">
                 <input
