@@ -3,13 +3,27 @@ import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { SquarePen, X } from 'lucide-react'
 import { Note } from '../app'
+import { useState } from 'react'
 
 interface NoteCardProps {
     note: Note
+    onNoteUpdated: (id: string, content: string) => void
     onNoteDeleted: (id: string) => void
 }
 
-export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
+export function NoteCard({ note, onNoteUpdated, onNoteDeleted }: NoteCardProps) {
+    const [isEditing, setIsEditing] = useState(false)
+    const [newContent, setNewContent] = useState(note.content)
+
+    function handleUpdateNote(event: React.ChangeEvent<HTMLTextAreaElement>) {
+        setNewContent(event.target.value)
+    }
+
+    function handleSaveNewNote() {
+        onNoteUpdated(note.id, newContent)
+        setIsEditing(false)
+    }
+
     return (
         <Dialog.Root>
             <Dialog.Trigger className="rounded-md outline-none text-left bg-slate-800 p-5 flex flex-col gap-3 overflow-hidden relative hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
@@ -31,25 +45,47 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
 
                     <button
                         type="button"
-                        className="absolute right-8 top-0 p-1.5 bg-slate-800 text-slate-400 hover:text-slate-100">
+                        className="absolute right-8 top-0 p-1.5 bg-slate-800 text-slate-400 hover:text-slate-100"
+                        onClick={() => setIsEditing(true)}>
                         <SquarePen className="size-5" />
                     </button>
 
-                    <div className="flex flex-1 flex-col gap-3 p-5">
-                        <span className="text-sm font-medium text-slate-300">
-                            {formatDistanceToNow(note.date, { locale: ptBR, addSuffix: true })}
-                        </span>
-                        <p className="text-sm leading-6 text-slate-400">{note.content}</p>
-                    </div>
+                    {isEditing ? (
+                        <form className="flex flex-col flex-1">
+                            <textarea
+                                autoFocus
+                                className="text-sm text-slate-400 leading-6 bg-transparent flex-1 resize-none outline-none p-8"
+                                onChange={handleUpdateNote}
+                                value={newContent}
+                            />
+                            <button
+                                className="w-full bg-lime-400 py-4 text-center text-sm text-lime-950 font-medium outline-none hover:bg-lime-500"
+                                type="button"
+                                onClick={handleSaveNewNote}>
+                                Salvar edição
+                            </button>
+                        </form>
+                    ) : (
+                        <div className="flex flex-1 flex-col gap-3 p-5">
+                            <span className="text-sm font-medium text-slate-300">
+                                {formatDistanceToNow(note.date, { locale: ptBR, addSuffix: true })}
+                            </span>
+                            <p className="text-sm leading-6 text-slate-400">{note.content}</p>
+                        </div>
+                    )}
 
-                    <button
-                        type="button"
-                        onClick={() => onNoteDeleted(note.id)}
-                        className="group w-full bg-slate-800 py-4 text-center text-sm text-slate-300 font-medium outline-none">
-                        Deseja{' '}
-                        <span className="text-red-400 group-hover:underline">apagar esta nota</span>
-                        ?
-                    </button>
+                    {!isEditing && (
+                        <button
+                            type="button"
+                            onClick={() => onNoteDeleted(note.id)}
+                            className="group w-full bg-slate-800 py-4 text-center text-sm text-slate-300 font-medium outline-none">
+                            Deseja{' '}
+                            <span className="text-red-400 group-hover:underline">
+                                apagar esta nota
+                            </span>
+                            ?
+                        </button>
+                    )}
                 </Dialog.Content>
             </Dialog.Portal>
         </Dialog.Root>
