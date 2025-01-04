@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { X } from 'lucide-react'
+import { SquarePen, X } from 'lucide-react'
 import { Note } from '../app'
 
 interface NoteCardProps {
@@ -28,6 +28,12 @@ export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
                     <Dialog.Close className="absolute right-0 top-0 p-1.5 bg-slate-800 text-slate-400 hover:text-slate-100">
                         <X className="size-5" />
                     </Dialog.Close>
+
+                    <button
+                        type="button"
+                        className="absolute right-8 top-0 p-1.5 bg-slate-800 text-slate-400 hover:text-slate-100">
+                        <SquarePen className="size-5" />
+                    </button>
 
                     <div className="flex flex-1 flex-col gap-3 p-5">
                         <span className="text-sm font-medium text-slate-300">
