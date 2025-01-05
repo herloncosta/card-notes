@@ -2,6 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 import { ChangeEvent, useState } from 'react'
 import { toast } from 'sonner'
+import { CustomTextArea } from './custom-text-area'
 
 interface NewNoteCardProps {
     onNoteCreated: (content: string) => void
@@ -119,11 +120,9 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
                                     </button>
                                 </p>
                             ) : (
-                                <textarea
-                                    autoFocus
-                                    className="text-sm text-slate-400 leading-6 bg-transparent flex-1 resize-none outline-none"
-                                    onChange={handleContentChanged}
-                                    value={content}
+                                <CustomTextArea
+                                    content={content}
+                                    onContentChanged={handleContentChanged}
                                 />
                             )}
                         </div>
